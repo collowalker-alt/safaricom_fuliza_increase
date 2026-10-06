@@ -218,7 +218,7 @@ body{
 }
 
 /* Plans */
-.plans{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.plans{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
 .plan{
   position:relative;border:2px solid #d8ebe0;background:#f8fcfa;
   border-radius:18px;padding:16px 12px;cursor:pointer;
@@ -385,4 +385,14 @@ footer{
   .phone-row{height:52px}
   .summary{grid-template-columns:1fr}
   .photo-bg{opacity:.25}
+}
+
+/* denser plans for longer list */
+.plans{grid-template-columns:repeat(3,1fr);gap:10px}
+.plan{padding:13px 10px;border-radius:16px}
+.plan .amount{font-size:15px}
+.plan .fee{font-size:11px}
+@media(max-width:620px){
+  .plans{grid-template-columns:1fr 1fr;gap:8px}
+  .plan .amount{font-size:14px}
 }

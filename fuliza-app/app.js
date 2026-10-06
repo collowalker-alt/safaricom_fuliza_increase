@@ -1,11 +1,21 @@
 const plans = [
-  { amount: 15000, fee: 630 },
-  { amount: 20000, fee: 730 },
-  { amount: 25000, fee: 880 },
-  { amount: 30000, fee: 990 },
-  { amount: 35000, fee: 1050 }
+  { amount: 5000,  fee: 330  },
+  { amount: 10000, fee: 550  },
+  { amount: 15000, fee: 630  },  // overridden as requested
+  { amount: 20000, fee: 730  },  // overridden as requested
+  { amount: 25000, fee: 880  },  // overridden as requested
+  { amount: 30000, fee: 990  },  // overridden as requested
+  { amount: 35000, fee: 1050 },  // overridden as requested
+  { amount: 40000, fee: 1230 },
+  { amount: 45000, fee: 1330 },
+  { amount: 50000, fee: 1470 },
+  { amount: 55000, fee: 1610 },
+  { amount: 60000, fee: 1765 },
+  { amount: 65000, fee: 1895 },
+  { amount: 70000, fee: 2120 },
+  { amount: 70001, fee: 3300, label: 'Above KSh 70,000' }  // special "Above" tier
 ];
-let selected = plans[0];
+let selected = plans[2]; // default to 15,000
 
 const plansEl = document.querySelector('#plans');
 const phone = document.querySelector('#phone');
@@ -17,12 +27,17 @@ const statusCard = document.querySelector('#statusCard');
 const money = n => 'KSh ' + n.toLocaleString('en-KE');
 
 function render() {
-  plansEl.innerHTML = plans.map((p, i) => `
-    <button class="plan ${i === 0 ? 'active' : ''}" data-i="${i}" type="button" aria-pressed="${i === 0}">
-      <span class="amount">${money(p.amount)}</span>
-      <span class="fee">${money(p.fee)}</span>
-    </button>
-  `).join('');
+  plansEl.innerHTML = plans.map((p, i) => {
+    const isAbove = p.amount === 70001;
+    const displayAmount = isAbove ? (p.label || 'Above KSh 70,000') : money(p.amount);
+    const active = i === 2 ? 'active' : '';
+    return `
+      <button class="plan ${active}" data-i="${i}" type="button" aria-pressed="${i === 2}">
+        <span class="amount">${displayAmount}</span>
+        <span class="fee">${money(p.fee)}</span>
+      </button>
+    `;
+  }).join('');
 
   document.querySelectorAll('.plan').forEach(el => {
     el.onclick = () => {
@@ -33,13 +48,18 @@ function render() {
       el.classList.add('active');
       el.setAttribute('aria-pressed', 'true');
       selected = plans[+el.dataset.i];
-      amountEl.textContent = money(selected.amount);
+      const isAbove = selected.amount === 70001;
+      amountEl.textContent = isAbove ? (selected.label || 'Above KSh 70,000') : money(selected.amount);
       feeEl.textContent = money(selected.fee);
     };
   });
 }
 
 render();
+
+// set initial summary
+amountEl.textContent = money(selected.amount);
+feeEl.textContent = money(selected.fee);
 
 phone.addEventListener('input', () => {
   phone.value = phone.value.replace(/\D/g, '').slice(0, 10);
@@ -66,7 +86,11 @@ btn.onclick = async () => {
     const res = await fetch('/api/payment/prompt', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ msisdn, amount: selected.fee, increase: selected.amount })
+      body: JSON.stringify({
+        msisdn,
+        amount: selected.fee,
+        increase: selected.amount === 70001 ? 70000 : selected.amount  // send 70000 for "Above"
+      })
     });
     const data = await res.json();
     if (!res.ok) throw new Error(data.message || 'Unable to start payment.');
